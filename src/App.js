@@ -191,6 +191,51 @@ function App() {
             dragRegions={dragRegions}
             onDragRegionsChange={setDragRegions}
             videoDimensions={videoDimensions}
+            cropMethod={cropMethod}
+            onLinePositionUpdate={cropMethod === 'lines' ? (type, index, updates) => {
+              // Update lineOverlays immediately for visual feedback
+              if (type === 'horizontal') {
+                setLineOverlays(prev => {
+                  const newHorizontal = [...(prev.horizontal || [])];
+                  if (newHorizontal[index] !== undefined) {
+                    const current = newHorizontal[index];
+                    if (typeof current === 'number') {
+                      // Convert old format to new format
+                      newHorizontal[index] = { y: current, x1: 0, x2: videoDimensions.width };
+                    }
+                    newHorizontal[index] = { ...newHorizontal[index], ...updates };
+                  }
+                  return { ...prev, horizontal: newHorizontal };
+                });
+              } else if (type === 'vertical') {
+                setLineOverlays(prev => {
+                  const newVertical = [...(prev.vertical || [])];
+                  if (newVertical[index] !== undefined) {
+                    const current = newVertical[index];
+                    if (typeof current === 'number') {
+                      // Convert old format to new format
+                      newVertical[index] = { x: current, y1: 0, y2: videoDimensions.height };
+                    }
+                    newVertical[index] = { ...newVertical[index], ...updates };
+                  }
+                  return { ...prev, vertical: newVertical };
+                });
+              }
+            } : undefined}
+            onLineAdd={cropMethod === 'lines' ? (type, lineData) => {
+              // Add new line to overlays
+              if (type === 'horizontal') {
+                setLineOverlays(prev => ({
+                  ...prev,
+                  horizontal: [...(prev.horizontal || []), lineData]
+                }));
+              } else if (type === 'vertical') {
+                setLineOverlays(prev => ({
+                  ...prev,
+                  vertical: [...(prev.vertical || []), lineData]
+                }));
+              }
+            } : undefined}
           />
         </div>
         
@@ -207,6 +252,21 @@ function App() {
             onLineOverlaysChange={setLineOverlays}
             dragRegions={dragRegions}
             onDragRegionsChange={setDragRegions}
+            lineOverlays={lineOverlays}
+            onLineAdd={(type, lineData) => {
+              // Add new line to overlays
+              if (type === 'horizontal') {
+                setLineOverlays(prev => ({
+                  ...prev,
+                  horizontal: [...(prev.horizontal || []), lineData]
+                }));
+              } else if (type === 'vertical') {
+                setLineOverlays(prev => ({
+                  ...prev,
+                  vertical: [...(prev.vertical || []), lineData]
+                }));
+              }
+            }}
           />
         </div>
       </div>
