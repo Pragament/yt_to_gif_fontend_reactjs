@@ -1,0 +1,44 @@
+.input-section {
+  margin-bottom: 1.5rem;
+}
+
+.input-section:last-child {
+  margin-bottom: 0;
+}
+
+.divider {
+  text-align: center;
+  margin: 1.5rem 0;
+  color: #999;
+  font-weight: 500;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.progress-container {
+  margin-top: 1rem;
+}
+
+.progress-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
